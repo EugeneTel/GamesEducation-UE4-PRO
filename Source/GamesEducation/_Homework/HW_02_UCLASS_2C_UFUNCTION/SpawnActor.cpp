@@ -13,21 +13,32 @@ ASpawnActor::ASpawnActor()
 	// Create Visual component
 	VisualComponent = CreateDefaultSubobject<UActorVisualComponent>(TEXT("VisualComponent"));
 	SetRootComponent(VisualComponent);
-
-	// Create Behavior Component as a SimpleRotatingComponent
-	BehaviorComponent = CreateDefaultSubobject<USimpleRotatingComponent>(TEXT("BehaviorComponent"));
-	BehaviorComponent->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
 void ASpawnActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CreateBehaviorComponent();
 }
 
 // Called every frame
 void ASpawnActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+// Create Behavior Component
+//----------------------------------------------------------------------------------------------------------------------
+void ASpawnActor::CreateBehaviorComponent()
+{
+	if (BehaviorComponentClass)
+	{
+		BehaviorComponent = NewObject<UActorBehaviorComponent>(this, BehaviorComponentClass);
+		BehaviorComponent->SetupAttachment(GetRootComponent());
+		BehaviorComponent->RegisterComponent();
+	}
 }
 

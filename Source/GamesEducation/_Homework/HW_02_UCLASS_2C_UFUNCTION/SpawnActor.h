@@ -39,10 +39,25 @@ public:
 	 * Can be Visible Anywhere but not editable
 	 * Can be read and write from a Blueprint
 	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Visual")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Behavior")
 	UActorBehaviorComponent* BehaviorComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<IInteractableInterface> Interact;
+	/**
+	 * Behavior Component Class - add custom behavior to the Actor
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Behavior")
+	TSubclassOf<UActorBehaviorComponent> BehaviorComponentClass;
+
+	/**
+	 * Create BehaviorComponent from a Class
+	 */
+	UFUNCTION(BlueprintCallable)
+	void CreateBehaviorComponent();
+
+	/**
+	 * Interactable Class for testing in Defaults
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MustImplement = "InteractableInterface"))
+	TSubclassOf<UActorComponent> InteractClass;
 
 };

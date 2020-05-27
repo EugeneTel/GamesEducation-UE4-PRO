@@ -21,8 +21,7 @@ void UActorVisualComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	UpdateMeshOffset_Implementation();
 }
 
 
