@@ -4,6 +4,7 @@
 
 #include "ActorVisualComponent.h"
 #include "CoreMinimal.h"
+#include "InteractableInterface.h"
 #include "SimpleRotatingComponent.h"
 #include "GameFramework/Actor.h"
 #include "SpawnActor.generated.h"
@@ -40,5 +41,8 @@ public:
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Visual")
 	UActorBehaviorComponent* BehaviorComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<IInteractableInterface> Interact;
 
 };

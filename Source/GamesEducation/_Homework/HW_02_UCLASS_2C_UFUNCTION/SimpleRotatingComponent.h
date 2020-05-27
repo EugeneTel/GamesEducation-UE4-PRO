@@ -4,6 +4,7 @@
 
 #include "ActorBehaviorComponent.h"
 #include "CoreMinimal.h"
+#include "InteractableInterface.h"
 #include "Components/ActorComponent.h"
 #include "SimpleRotatingComponent.generated.h"
 
@@ -12,7 +13,7 @@
  * Available for Blueprint implementation, Can Be spawned in Blueprint, belongs to ClassGroup "Behavior"
  */
 UCLASS(Blueprintable, ClassGroup=(Behavior), meta=(BlueprintSpawnableComponent, ToolTip="Simple Rotation Component") )
-class GAMESEDUCATION_API USimpleRotatingComponent : public UActorBehaviorComponent
+class GAMESEDUCATION_API USimpleRotatingComponent : public UActorBehaviorComponent, public IInteractableInterface
 {
 	GENERATED_BODY()
 
@@ -27,6 +28,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Interact();
 
 	/**
 	 * Rotate the Actor

@@ -37,6 +37,11 @@ void USimpleRotatingComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	}
 }
 
+void USimpleRotatingComponent::Interact_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("SimpleRotatingComponent::Interact_Implementation"));
+}
+
 /**
  * Rotate the Owner Actor every tick
  */
