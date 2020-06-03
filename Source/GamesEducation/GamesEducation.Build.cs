@@ -9,5 +9,7 @@ public class GamesEducation : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
+		
+		PrivateDependencyModuleNames.AddRange(new string[] { "Debug" });
 	}
 }
