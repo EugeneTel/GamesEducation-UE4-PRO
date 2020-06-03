@@ -3,6 +3,7 @@
 #include "GamesEducationProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "_Homework/HW_03_Delegates/IDamage.h"
 
 AGamesEducationProjectile::AGamesEducationProjectile() 
 {
@@ -38,6 +39,13 @@ void AGamesEducationProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* Othe
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
+		Destroy();
+	}
+
+	// Try to Apply Damage to the Actor
+	if (OtherActor != NULL && OtherActor->GetClass()->ImplementsInterface(UIDamage::StaticClass()))
+	{
+		Cast<IIDamage>(OtherActor)->OnDamageReceived().Broadcast(10.f);
 		Destroy();
 	}
 }

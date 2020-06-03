@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "IDamage.h"
 #include "Components/BoxComponent.h"
 #include "Components/InterpToMovementComponent.h"
 #include "Components/SplineComponent.h"
@@ -15,19 +16,19 @@
 
 
 /**
-* Declare OnTurretHit Delegate
+* Declare FOnDamaged Delegate
 * 
 * @return FVector - Offset for the Turret Movement
 */
-DECLARE_DELEGATE_RetVal_OneParam(FVector, FOnDamage, class ADynamicTurret*)
+DECLARE_DELEGATE_RetVal_OneParam(FVector, FOnDamaged, class ADynamicTurret*)
 
+/** Declare FOnDeath Delegate */
+DECLARE_EVENT_OneParam(ADynamicTurret, FOnDeath, ADynamicTurret*)
 
 UCLASS()
-class GAMESEDUCATION_API ADynamicTurret : public AActor
+class GAMESEDUCATION_API ADynamicTurret : public AActor, public IIDamage
 {
 	GENERATED_BODY()
-
-	DECLARE_EVENT_OneParam(ADynamicTurret, FOnDeath, ADynamicTurret*)
 
 
 public:	
@@ -59,11 +60,14 @@ protected:
 
 public:
 
+	/** On Damage Received Delegate */
+	FOnDamageReceived OnDamageReceivedEvent;
+	
 	/** On Damage Delegate */
-	FOnDamage OnDamage;
+	FOnDamaged OnDamagedEvent;
 
 	/** On Death Delegate */
-	FOnDeath OnDeath;
+	FOnDeath OnDeathEvent;
 
 	/** Collisions */
 	UPROPERTY(VisibleAnywhere)
@@ -89,13 +93,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Config)
 	int32 Score;
 
-	/** On Turret Hit */
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	/** Delegate method */ 
+	virtual FOnDamageReceived& OnDamageReceived() override;
 
-	/** Takes damage */
-	UFUNCTION()
-	void Damage(AActor* OtherActor);
+	/** Subscribed to the Delegate OnDamageReceived */
+	void ApplyDamage(float Damage);
 
 	/** The Turret Death */
 	UFUNCTION()

@@ -10,8 +10,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 void AHW_03_GameMode::AddTurret(ADynamicTurret* Turret)
 {
-    Turret->OnDamage.BindUFunction(this, "TurretDamage");
-    Turret->OnDeath.AddUFunction(this, "TurretDeath");
+    Turret->OnDamagedEvent.BindUFunction(this, "TurretDamage");
+    Turret->OnDeathEvent.AddUFunction(this, "TurretDeath");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

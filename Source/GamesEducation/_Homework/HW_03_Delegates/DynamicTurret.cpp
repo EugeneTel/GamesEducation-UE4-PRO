@@ -20,7 +20,7 @@ ADynamicTurret::ADynamicTurret()
 	PrimaryActorTick.bCanEverTick = true;
 
 	/** Setup defaults */
-	Health = 3.f;
+	Health = 30.f;
 	bAlive = true;
 	Score = 10;
 
@@ -42,15 +42,15 @@ ADynamicTurret::ADynamicTurret()
 	MovementComp = CreateDefaultSubobject<UInterpToMovementComponent>(TEXT("MovementComp"));
 	MovementComp->BehaviourType = EInterpToBehaviourType::PingPong;
 	MovementComp->Duration = 1.f;
+
+	// Subscribe to Events
+	OnDamageReceivedEvent.AddUObject(this, &ADynamicTurret::ApplyDamage);
 }
 
 // Called when the game starts or when spawned
 void ADynamicTurret::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Register Turret hit delegate 
-	CollisionComp->OnComponentHit.AddDynamic(this, &ADynamicTurret::OnHit);
 
 	SetupMovementRoute();
 
@@ -102,38 +102,32 @@ void ADynamicTurret::LookOnTarget() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-// On Turret Hit
+// 
 //----------------------------------------------------------------------------------------------------------------------
-void ADynamicTurret::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+IIDamage::FOnDamageReceived& ADynamicTurret::OnDamageReceived()
 {
-	// If Hit By Projectile
-	if (OtherActor->IsA(AGamesEducationProjectile::StaticClass()))
-	{
-		Damage(OtherActor);
-
-		OtherActor->Destroy();
-	}
+	return OnDamageReceivedEvent;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-// Takes Damage
+// Apply Damage to the Turret
 //----------------------------------------------------------------------------------------------------------------------
-void ADynamicTurret::Damage(AActor* OtherActor)
+void ADynamicTurret::ApplyDamage(float Damage)
 {
 	if (!bAlive)
 		return;
 
 	// Decrease Health and checking for the Death condition
-	Health--;
+	Health -= Damage;
 	if (Health <= 0)
 	{
 		Death();
 	}
 
 	// Broadcast OnDamage Delegate and set a new Duration (movement speed)
-	if (OnDamage.IsBound())
+	if (OnDamagedEvent.IsBound())
 	{
-		const FVector TurretOffset = OnDamage.Execute(this);
+		const FVector TurretOffset = OnDamagedEvent.Execute(this);
 
 		if (bAlive)
 		{
@@ -150,9 +144,9 @@ void ADynamicTurret::Death()
 	bAlive = false;
 	CollisionComp->SetSimulatePhysics(true);
 
-	if (OnDeath.IsBound())
+	if (OnDeathEvent.IsBound())
 	{
-		OnDeath.Broadcast(this);
+		OnDeathEvent.Broadcast(this);
 	}
 }
 
