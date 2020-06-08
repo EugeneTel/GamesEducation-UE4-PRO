@@ -60,25 +60,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	FVector GunOffset;
-
-	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class AGamesEducationProjectile> ProjectileClass;
-
-	/** Sound to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	class USoundBase* FireSound;
-
-	/** AnimMontage to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	class UAnimMontage* FireAnimation;
-
 	/** Whether to use motion controller location for aiming. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	uint32 bUsingMotionControllers : 1;
+    uint32 bUsingMotionControllers : 1;
+
+	/** Weapon Component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gameplay)
+	class UGamesEducationWeaponComponent* WeaponComponent;
 
 protected:
 	
@@ -137,6 +125,8 @@ public:
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	/** Returns FP_MuzzleLocation subobject */
+	FORCEINLINE class USceneComponent* GetFP_MuzzleLocation() const { return FP_MuzzleLocation; }
 
 };
 
