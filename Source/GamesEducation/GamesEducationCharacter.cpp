@@ -120,6 +120,9 @@ void AGamesEducationCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AGamesEducationCharacter::OnFire);
 
+	// Bind reload event
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AGamesEducationCharacter::OnReload);
+
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
 
@@ -141,6 +144,11 @@ void AGamesEducationCharacter::SetupPlayerInputComponent(class UInputComponent* 
 void AGamesEducationCharacter::OnFire()
 {
 	WeaponComponent->Fire();
+}
+
+void AGamesEducationCharacter::OnReload()
+{
+	WeaponComponent->Reload();
 }
 
 void AGamesEducationCharacter::OnResetVR()
