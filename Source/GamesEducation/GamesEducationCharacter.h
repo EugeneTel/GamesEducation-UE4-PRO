@@ -138,5 +138,11 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+public:
+
+	/** Time Control Component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay)
+	class UTimeControlComponent* TimeControlComp;
+
 };
 

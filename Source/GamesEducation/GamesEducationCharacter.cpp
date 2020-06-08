@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "_Homework/L_04_Components/TimeControlComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -136,6 +137,10 @@ void AGamesEducationCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	PlayerInputComponent->BindAxis("TurnRate", this, &AGamesEducationCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AGamesEducationCharacter::LookUpAtRate);
+
+	// Create Time Control Component using the template function
+	TimeControlComp = CreateComponentWithInput(this, PlayerInputComponent);
+	TimeControlComp->RegisterComponent();
 }
 
 void AGamesEducationCharacter::OnFire()
