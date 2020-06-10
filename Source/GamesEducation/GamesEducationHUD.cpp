@@ -6,6 +6,7 @@
 #include "TextureResource.h"
 #include "CanvasItem.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Log.h"
 
 AGamesEducationHUD::AGamesEducationHUD()
 {
@@ -32,4 +33,18 @@ void AGamesEducationHUD::DrawHUD()
 	FCanvasTileItem TileItem( CrosshairDrawPosition, CrosshairTex->Resource, FLinearColor::White);
 	TileItem.BlendMode = SE_BLEND_Translucent;
 	Canvas->DrawItem( TileItem );
+}
+
+void AGamesEducationHUD::BeginPlay()
+{
+	CreateCustomWidget();
+}
+
+void AGamesEducationHUD::CreateCustomWidget()
+{
+	if (!PlayerStateWidget && PlayerStateWidgetClass)
+	{
+		PlayerStateWidget = CreateWidget(GetWorld(), PlayerStateWidgetClass);
+		PlayerStateWidget->AddToViewport();
+	}
 }

@@ -7,6 +7,9 @@
 #include "GamesEducationCharacter.generated.h"
 
 class UInputComponent;
+class AGamesEducationCharacter;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterUpdateAmmo, int32);
 
 UCLASS(config=Game)
 class AGamesEducationCharacter : public ACharacter
@@ -52,6 +55,10 @@ protected:
 	virtual void BeginPlay();
 
 public:
+
+	/** Global notification when a character updates ammo. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterUpdateAmmo NotifyUpdateAmmo;
+	
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseTurnRate;
@@ -122,6 +129,8 @@ protected:
 	 * @returns true if touch controls were enabled.
 	 */
 	bool EnableTouchscreenMovement(UInputComponent* InputComponent);
+
+	virtual void PostInitializeComponents() override;
 
 public:
 	/** Returns Mesh1P subobject **/

@@ -15,6 +15,8 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
+FOnGamesEducationCharacterUpdateAmmo AGamesEducationCharacter::NotifyUpdateAmmo;
+
 //////////////////////////////////////////////////////////////////////////
 // AGamesEducationCharacter
 
@@ -103,6 +105,8 @@ void AGamesEducationCharacter::BeginPlay()
 		VR_Gun->SetHiddenInGame(true, true);
 		Mesh1P->SetHiddenInGame(false, true);
 	}
+
+	WeaponComponent->InitAmmo();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -262,4 +266,10 @@ bool AGamesEducationCharacter::EnableTouchscreenMovement(class UInputComponent* 
 	}
 	
 	return false;
+}
+
+void AGamesEducationCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
 }
