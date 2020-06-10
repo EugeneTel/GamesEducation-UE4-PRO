@@ -7,6 +7,10 @@
 #include "Kismet/GameplayStatics.h"
 #include "Animation/AnimInstance.h"
 #include "GamesEducationProjectile.h"
+#include "HAL/PlatformFilemanager.h"
+#include "Misc/DefaultValueHelper.h"
+#include "Misc/Paths.h"
+#include "Misc/FileHelper.h"
 
 // Sets default values for this component's properties
 UGamesEducationWeaponComponent::UGamesEducationWeaponComponent()
@@ -17,6 +21,10 @@ UGamesEducationWeaponComponent::UGamesEducationWeaponComponent()
 
 	// Default offset from the character location for projectiles to spawn
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
+
+	// Setup Defaults
+	Ammo = 10;
+	MaxAmmo = 10;
 }
 
 
@@ -28,6 +36,9 @@ void UGamesEducationWeaponComponent::BeginPlay()
 	WeaponOwner = Cast<AGamesEducationCharacter>(GetOwner());
 	if (!WeaponOwner)
 		UE_LOG(LogTemp, Error, TEXT("Weapon Owner is not defined!"));
+
+	// Load ammo from the saved file
+	InitAmmo();
 }
 
 
@@ -41,6 +52,12 @@ void UGamesEducationWeaponComponent::TickComponent(float DeltaTime, ELevelTick T
 
 void UGamesEducationWeaponComponent::Fire()
 {
+	if (!HasAmmo())
+	{
+		ULog::Error("No Ammo!!!", LO_Both);
+		return;
+	}
+	
 	// try and fire a projectile
 	if (ProjectileClass != NULL)
 	{
@@ -57,7 +74,9 @@ void UGamesEducationWeaponComponent::Fire()
 
 			// spawn the projectile at the muzzle
 			World->SpawnActor<AGamesEducationProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-			
+
+			// Use 1 bullet
+			UseAmmo();
 		}
 	}
 
@@ -77,5 +96,109 @@ void UGamesEducationWeaponComponent::Fire()
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
 	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+// File System
+//----------------------------------------------------------------------------------------------------------------------
+
+bool UGamesEducationWeaponComponent::SaveToFile(FString FileName, FString Data)
+{
+	if (FileName.IsEmpty())
+	{
+		ULog::Error("FileName can't be Empty!");
+		return false;
+	}
+	
+	FString SaveDirectory = FPaths::ProjectSavedDir();
+	const FString FilePath = FPaths::Combine(SaveDirectory, FileName);
+
+	FText FileError;
+	if (FFileHelper::IsFilenameValidForSaving(FilePath, FileError))
+	{
+		return FFileHelper::SaveStringToFile(Data, *FilePath);
+	} else
+	{
+		ULog::Error(FileError.ToString(), LO_Both);
+	}
+
+	return false;
+}
+
+bool UGamesEducationWeaponComponent::LoadFromFile(FString FileName, FString& OutData)
+{
+	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+	FString SaveDirectory = FPaths::ProjectSavedDir();
+	const FString FilePath = FPaths::Combine(SaveDirectory, FileName);
+
+	if (PlatformFile.FileExists(*FilePath))
+	{
+		return FFileHelper::LoadFileToString(OutData, *FilePath);
+	} else
+	{
+		ULog::Info("Saving Ammo file is not exist!", LO_Both);
+	}
+
+	return false;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+// Ammo
+//----------------------------------------------------------------------------------------------------------------------
+
+void UGamesEducationWeaponComponent::UseAmmo()
+{
+	Ammo -= 1;
+
+	if (SaveToFile(SaveAmmoFileName.ToString(), FString::FromInt(Ammo)))
+	{
+		ULog::Number(Ammo, "Number of Ammo: ", "", DLNS_Decimal, LO_Both);
+	} else
+	{
+		ULog::Error("Ammo can't be saved!", LO_Both);
+	}
+}
+
+bool UGamesEducationWeaponComponent::HasAmmo() const
+{
+	return Ammo > 0;
+}
+
+void UGamesEducationWeaponComponent::AddAmmo(int32 Amount)
+{
+	Ammo += Amount;
+
+	if (SaveToFile(SaveAmmoFileName.ToString(), FString::FromInt(Ammo)))
+	{
+		ULog::Number(Ammo, "Ammo Added Number of Ammo: ", "", DLNS_Decimal, LO_Both);
+	} else
+	{
+		ULog::Error("Added Ammo can't be saved!", LO_Both);
+	}
+}
+
+void UGamesEducationWeaponComponent::InitAmmo()
+{
+	FString Data;
+	if (LoadFromFile(SaveAmmoFileName.ToString(), Data))
+	{
+		int32 SavedAmmo;
+		if (FDefaultValueHelper::ParseInt(Data, SavedAmmo))
+		{
+			Ammo = SavedAmmo;
+			ULog::Number(Ammo, "Ammo Successfully loaded: ", "", DLNS_Decimal, LO_Both);
+		} else
+		{
+			ULog::Error("Loaded Ammo can't be parsed!", LO_Both);
+		}
+	} else
+	{
+		ULog::Error("Ammo can't be loaded!", LO_Both);
+	}	
+}
+
+void UGamesEducationWeaponComponent::Reload()
+{
+	AddAmmo(MaxAmmo);
 }
 

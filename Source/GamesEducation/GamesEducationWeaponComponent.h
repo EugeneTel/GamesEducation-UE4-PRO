@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GamesEducationCharacter.h"
 #include "Components/ActorComponent.h"
+
+#include "Log.h"
 #include "GamesEducationWeaponComponent.generated.h"
 
 
@@ -47,5 +49,54 @@ public:
 
 	/** AnimMontage to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-    class UAnimMontage* FireAnimation;		
+    class UAnimMontage* FireAnimation;
+
+//----------------------------------------------------------------------------------------------------------------------
+// File System
+//----------------------------------------------------------------------------------------------------------------------
+
+	/** Save Data to the File */
+	UFUNCTION(BlueprintCallable)
+	bool SaveToFile(FString FileName, FString Data);
+
+	/** Load Data from the File */ 
+	UFUNCTION(BlueprintCallable)
+	bool LoadFromFile(FString FileName, FString& OutData);
+
+	
+//----------------------------------------------------------------------------------------------------------------------
+// Ammo
+//----------------------------------------------------------------------------------------------------------------------
+	
+	/** File name for saving the ammo data */
+	UPROPERTY(EditDefaultsOnly, Category=Ammo)
+	FName SaveAmmoFileName;
+
+	/** Number of Ammo */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Ammo)
+	int32 Ammo;
+
+	/** Maximal number of Ammo */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Ammo)
+	int32 MaxAmmo;
+
+	/** Use ammo for firing */
+	UFUNCTION(BlueprintCallable, Category=Ammo)
+	void UseAmmo();
+
+	/** Does the player has ammo */
+	UFUNCTION(BlueprintCallable, Category=Ammo)
+	bool HasAmmo() const;
+
+	/** Adding ammo to the player */
+	UFUNCTION(BlueprintCallable, Category=Ammo)
+	void AddAmmo(int32 Amount);
+
+	/** Init ammo from the saved file */
+	UFUNCTION(BlueprintCallable, Category=Ammo)
+	void InitAmmo();
+
+	/** Reload the Ammo*/
+	UFUNCTION(BlueprintCallable, Category=Ammo)
+	void Reload();
 };
