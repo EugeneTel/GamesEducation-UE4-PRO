@@ -36,6 +36,9 @@ FVector AHW_03_GameMode::TurretDamage(ADynamicTurret* Turret)
 void AHW_03_GameMode::TurretDeath(ADynamicTurret* Turret)
 {
     AddPlayerScore(Turret->Score);
+
+    // Notify subscribers about killing a turret
+    AGamesEducationCharacter::NotifyEnemyKill.Broadcast(Turret);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

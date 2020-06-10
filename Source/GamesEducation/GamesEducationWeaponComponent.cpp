@@ -50,7 +50,8 @@ void UGamesEducationWeaponComponent::Fire()
 {
 	if (!HasAmmo())
 	{
-		ULog::Error("No Ammo!!!", LO_Both);
+		// Inform subscribers about No Ammo
+		AGamesEducationCharacter::NotifyNoAmmo.Broadcast();
 		return;
 	}
 	

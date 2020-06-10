@@ -16,7 +16,9 @@
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
 FOnGamesEducationCharacterUpdateAmmo AGamesEducationCharacter::NotifyUpdateAmmo;
-FOnGamesEducationCharacterUpdateAmmo AGamesEducationCharacter::NotifyUpdateScore;
+FOnGamesEducationCharacterUpdateScore AGamesEducationCharacter::NotifyUpdateScore;
+FOnGamesEducationCharacterEnemyKill AGamesEducationCharacter::NotifyEnemyKill;
+FOnGamesEducationCharacterNoAmmo AGamesEducationCharacter::NotifyNoAmmo;
 
 //////////////////////////////////////////////////////////////////////////
 // AGamesEducationCharacter
