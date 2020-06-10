@@ -151,7 +151,7 @@ void UGamesEducationWeaponComponent::UseAmmo()
 
 	if (SaveToFile(SaveAmmoFileName.ToString(), FString::FromInt(Ammo)))
 	{
-		ULog::Number(Ammo, "Number of Ammo: ", "", DLNS_Decimal, LO_Both);
+		//ULog::Number(Ammo, "Number of Ammo: ", "", DLNS_Decimal, LO_Both);
 	} else
 	{
 		ULog::Error("Ammo can't be saved!", LO_Both);

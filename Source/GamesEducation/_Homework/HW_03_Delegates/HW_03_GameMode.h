@@ -24,6 +24,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 PlayerScore = 0;
 
+	/** Begin Play */
+	virtual void StartPlay() override;
+
 	/** Register a Turret in the Game */
 	UFUNCTION(BlueprintCallable)
 	void AddTurret(ADynamicTurret* Turret);

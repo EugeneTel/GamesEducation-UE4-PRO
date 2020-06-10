@@ -37,6 +37,13 @@ void AGamesEducationHUD::DrawHUD()
 
 void AGamesEducationHUD::BeginPlay()
 {
+
+}
+
+void AGamesEducationHUD::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	
 	CreateCustomWidget();
 }
 

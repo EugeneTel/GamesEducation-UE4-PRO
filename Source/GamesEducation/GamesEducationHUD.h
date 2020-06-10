@@ -20,6 +20,8 @@ public:
 	virtual void DrawHUD() override;
 
 	void BeginPlay() override;
+protected:
+	virtual void PostInitializeComponents() override;
 
 private:
 	/** Crosshair asset pointer */
@@ -29,9 +31,11 @@ private:
 	UPROPERTY()
 	class UUserWidget* PlayerStateWidget;
 
+	/** Player State Widget Class */
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UPlayerStateWidget> PlayerStateWidgetClass;
 
+	/** Create custorm widgets */
 	UFUNCTION()
 	void CreateCustomWidget();
 

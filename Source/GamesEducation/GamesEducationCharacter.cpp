@@ -16,6 +16,7 @@
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
 FOnGamesEducationCharacterUpdateAmmo AGamesEducationCharacter::NotifyUpdateAmmo;
+FOnGamesEducationCharacterUpdateAmmo AGamesEducationCharacter::NotifyUpdateScore;
 
 //////////////////////////////////////////////////////////////////////////
 // AGamesEducationCharacter
@@ -106,6 +107,7 @@ void AGamesEducationCharacter::BeginPlay()
 		Mesh1P->SetHiddenInGame(false, true);
 	}
 
+	// Init Weapon Ammo
 	WeaponComponent->InitAmmo();
 }
 
@@ -266,10 +268,4 @@ bool AGamesEducationCharacter::EnableTouchscreenMovement(class UInputComponent* 
 	}
 	
 	return false;
-}
-
-void AGamesEducationCharacter::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-
 }

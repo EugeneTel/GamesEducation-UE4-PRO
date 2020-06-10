@@ -20,7 +20,7 @@ ADynamicTurret::ADynamicTurret()
 	PrimaryActorTick.bCanEverTick = true;
 
 	/** Setup defaults */
-	Health = 30.f;
+	Health = 20.f;
 	bAlive = true;
 	Score = 10;
 

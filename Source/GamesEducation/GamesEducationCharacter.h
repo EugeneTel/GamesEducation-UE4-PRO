@@ -10,6 +10,7 @@ class UInputComponent;
 class AGamesEducationCharacter;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterUpdateAmmo, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterUpdateScore, int32);
 
 UCLASS(config=Game)
 class AGamesEducationCharacter : public ACharacter
@@ -58,6 +59,9 @@ public:
 
 	/** Global notification when a character updates ammo. Needed for HUD */
 	GAMESEDUCATION_API static FOnGamesEducationCharacterUpdateAmmo NotifyUpdateAmmo;
+
+	/** Global notification when a character score is updated. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterUpdateAmmo NotifyUpdateScore;
 	
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -129,8 +133,6 @@ protected:
 	 * @returns true if touch controls were enabled.
 	 */
 	bool EnableTouchscreenMovement(UInputComponent* InputComponent);
-
-	virtual void PostInitializeComponents() override;
 
 public:
 	/** Returns Mesh1P subobject **/

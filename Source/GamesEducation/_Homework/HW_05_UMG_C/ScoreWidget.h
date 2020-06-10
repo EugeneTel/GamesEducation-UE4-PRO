@@ -13,5 +13,15 @@ UCLASS()
 class GAMESEDUCATION_API UScoreWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+protected:
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
+    class UTextBlock* ScoreText;
+    
+    /** Widget Constructor */
+    virtual void NativeConstruct() override;
+
+    /** On Update Player Score */
+    void OnUpdateScore(int32 Score) const;
 };
