@@ -150,5 +150,11 @@ public:
 	/** Returns FP_MuzzleLocation subobject */
 	FORCEINLINE class USceneComponent* GetFP_MuzzleLocation() const { return FP_MuzzleLocation; }
 
+public:
+
+	/** Time Control Component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Gameplay)
+	class UTimeControlComponent* TimeControlComp;
+
 };
 

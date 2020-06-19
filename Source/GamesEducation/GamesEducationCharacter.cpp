@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "_Homework/L_04_Components/TimeControlComponent.h"
 #include "GamesEducationWeaponComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
@@ -58,6 +59,9 @@ AGamesEducationCharacter::AGamesEducationCharacter()
 	FP_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
 	FP_MuzzleLocation->SetupAttachment(FP_Gun);
 	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
+
+	// Default offset from the character location for projectiles to spawn
+	GunOffset = FVector(100.0f, 0.0f, 10.0f);
 
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P, FP_Gun, and VR_Gun 
 	// are set in the derived blueprint asset named MyCharacter to avoid direct content references in C++.
@@ -147,6 +151,10 @@ void AGamesEducationCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	PlayerInputComponent->BindAxis("TurnRate", this, &AGamesEducationCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AGamesEducationCharacter::LookUpAtRate);
+
+	// Create Time Control Component using the template function
+	TimeControlComp = CreateComponentWithInput(this, PlayerInputComponent);
+	TimeControlComp->RegisterComponent();
 }
 
 void AGamesEducationCharacter::OnFire()
