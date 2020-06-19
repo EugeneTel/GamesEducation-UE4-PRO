@@ -4,6 +4,14 @@
 #include "HW_03_GameMode.h"
 
 #include "Kismet/KismetMathLibrary.h"
+#include "GamesEducation/GamesEducationCharacter.h"
+
+void AHW_03_GameMode::StartPlay()
+{
+    Super::StartPlay();
+    
+    AGamesEducationCharacter::NotifyUpdateScore.Broadcast(PlayerScore);
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 // Register a Turret in the Game
@@ -28,6 +36,9 @@ FVector AHW_03_GameMode::TurretDamage(ADynamicTurret* Turret)
 void AHW_03_GameMode::TurretDeath(ADynamicTurret* Turret)
 {
     AddPlayerScore(Turret->Score);
+
+    // Notify subscribers about killing a turret
+    AGamesEducationCharacter::NotifyEnemyKill.Broadcast(Turret);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -37,5 +48,6 @@ void AHW_03_GameMode::AddPlayerScore(const int32 Amount)
 {
     PlayerScore += Amount;
 
-    ULog::Number(PlayerScore, "Player Score: ", "", DLNS_Decimal, LO_Both);
+    // Notify subscribers about updating Score
+    AGamesEducationCharacter::NotifyUpdateScore.Broadcast(PlayerScore);
 }

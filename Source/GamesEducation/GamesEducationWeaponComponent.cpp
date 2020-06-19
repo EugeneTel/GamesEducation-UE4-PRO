@@ -23,7 +23,6 @@ UGamesEducationWeaponComponent::UGamesEducationWeaponComponent()
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
 
 	// Setup Defaults
-	Ammo = 10;
 	MaxAmmo = 10;
 }
 
@@ -36,9 +35,6 @@ void UGamesEducationWeaponComponent::BeginPlay()
 	WeaponOwner = Cast<AGamesEducationCharacter>(GetOwner());
 	if (!WeaponOwner)
 		UE_LOG(LogTemp, Error, TEXT("Weapon Owner is not defined!"));
-
-	// Load ammo from the saved file
-	InitAmmo();
 }
 
 
@@ -54,7 +50,8 @@ void UGamesEducationWeaponComponent::Fire()
 {
 	if (!HasAmmo())
 	{
-		ULog::Error("No Ammo!!!", LO_Both);
+		// Inform subscribers about No Ammo
+		AGamesEducationCharacter::NotifyNoAmmo.Broadcast();
 		return;
 	}
 	
@@ -150,9 +147,12 @@ void UGamesEducationWeaponComponent::UseAmmo()
 {
 	Ammo -= 1;
 
+	// Notify subscribers about updating ammo
+	AGamesEducationCharacter::NotifyUpdateAmmo.Broadcast(Ammo);
+
 	if (SaveToFile(SaveAmmoFileName.ToString(), FString::FromInt(Ammo)))
 	{
-		ULog::Number(Ammo, "Number of Ammo: ", "", DLNS_Decimal, LO_Both);
+		//ULog::Number(Ammo, "Number of Ammo: ", "", DLNS_Decimal, LO_Both);
 	} else
 	{
 		ULog::Error("Ammo can't be saved!", LO_Both);
@@ -167,6 +167,9 @@ bool UGamesEducationWeaponComponent::HasAmmo() const
 void UGamesEducationWeaponComponent::AddAmmo(int32 Amount)
 {
 	Ammo += Amount;
+
+	// Notify subscribers about updating ammo
+	AGamesEducationCharacter::NotifyUpdateAmmo.Broadcast(Ammo);
 
 	if (SaveToFile(SaveAmmoFileName.ToString(), FString::FromInt(Ammo)))
 	{
@@ -194,7 +197,15 @@ void UGamesEducationWeaponComponent::InitAmmo()
 	} else
 	{
 		ULog::Error("Ammo can't be loaded!", LO_Both);
-	}	
+	}
+
+	if (!Ammo)
+	{
+		Ammo = MaxAmmo;
+	}
+
+	// Notify subscribers about updating ammo
+	AGamesEducationCharacter::NotifyUpdateAmmo.Broadcast(Ammo);
 }
 
 void UGamesEducationWeaponComponent::Reload()

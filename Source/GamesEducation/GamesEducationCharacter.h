@@ -7,6 +7,12 @@
 #include "GamesEducationCharacter.generated.h"
 
 class UInputComponent;
+class ADynamicTurret;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterUpdateAmmo, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterUpdateScore, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterEnemyKill, ADynamicTurret*);
+DECLARE_MULTICAST_DELEGATE(FOnGamesEducationCharacterNoAmmo);
 
 UCLASS(config=Game)
 class AGamesEducationCharacter : public ACharacter
@@ -52,6 +58,19 @@ protected:
 	virtual void BeginPlay();
 
 public:
+
+	/** Global notification when a character updates ammo. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterUpdateAmmo NotifyUpdateAmmo;
+
+	/** Global notification when a character score is updated. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterUpdateAmmo NotifyUpdateScore;
+
+	/** Global notification when a character killed an enemy. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterEnemyKill NotifyEnemyKill;
+
+	/** Global notification when a character has no ammo. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterNoAmmo NotifyNoAmmo;
+	
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseTurnRate;

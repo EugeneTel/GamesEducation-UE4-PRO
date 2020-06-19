@@ -15,6 +15,11 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
+FOnGamesEducationCharacterUpdateAmmo AGamesEducationCharacter::NotifyUpdateAmmo;
+FOnGamesEducationCharacterUpdateScore AGamesEducationCharacter::NotifyUpdateScore;
+FOnGamesEducationCharacterEnemyKill AGamesEducationCharacter::NotifyEnemyKill;
+FOnGamesEducationCharacterNoAmmo AGamesEducationCharacter::NotifyNoAmmo;
+
 //////////////////////////////////////////////////////////////////////////
 // AGamesEducationCharacter
 
@@ -103,6 +108,9 @@ void AGamesEducationCharacter::BeginPlay()
 		VR_Gun->SetHiddenInGame(true, true);
 		Mesh1P->SetHiddenInGame(false, true);
 	}
+
+	// Init Weapon Ammo
+	WeaponComponent->InitAmmo();
 }
 
 //////////////////////////////////////////////////////////////////////////
