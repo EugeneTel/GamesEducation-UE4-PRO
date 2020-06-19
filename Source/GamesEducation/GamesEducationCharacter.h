@@ -7,6 +7,12 @@
 #include "GamesEducationCharacter.generated.h"
 
 class UInputComponent;
+class ADynamicTurret;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterUpdateAmmo, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterUpdateScore, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterEnemyKill, ADynamicTurret*);
+DECLARE_MULTICAST_DELEGATE(FOnGamesEducationCharacterNoAmmo);
 
 UCLASS(config=Game)
 class AGamesEducationCharacter : public ACharacter
@@ -52,6 +58,19 @@ protected:
 	virtual void BeginPlay();
 
 public:
+
+	/** Global notification when a character updates ammo. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterUpdateAmmo NotifyUpdateAmmo;
+
+	/** Global notification when a character score is updated. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterUpdateAmmo NotifyUpdateScore;
+
+	/** Global notification when a character killed an enemy. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterEnemyKill NotifyEnemyKill;
+
+	/** Global notification when a character has no ammo. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterNoAmmo NotifyNoAmmo;
+	
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseTurnRate;
@@ -60,30 +79,21 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	FVector GunOffset;
-
-	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class AGamesEducationProjectile> ProjectileClass;
-
-	/** Sound to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	class USoundBase* FireSound;
-
-	/** AnimMontage to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	class UAnimMontage* FireAnimation;
-
 	/** Whether to use motion controller location for aiming. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	uint32 bUsingMotionControllers : 1;
+    uint32 bUsingMotionControllers : 1;
+
+	/** Weapon Component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gameplay)
+	class UGamesEducationWeaponComponent* WeaponComponent;
 
 protected:
 	
 	/** Fires a projectile. */
 	void OnFire();
+
+	/** Reloads the weapon */
+	void OnReload();
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
@@ -137,6 +147,8 @@ public:
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	/** Returns FP_MuzzleLocation subobject */
+	FORCEINLINE class USceneComponent* GetFP_MuzzleLocation() const { return FP_MuzzleLocation; }
 
 public:
 

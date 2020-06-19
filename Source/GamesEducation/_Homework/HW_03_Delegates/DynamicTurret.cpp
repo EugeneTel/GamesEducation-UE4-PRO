@@ -20,7 +20,7 @@ ADynamicTurret::ADynamicTurret()
 	PrimaryActorTick.bCanEverTick = true;
 
 	/** Setup defaults */
-	Health = 30.f;
+	Health = 20.f;
 	bAlive = true;
 	Score = 10;
 
@@ -83,8 +83,6 @@ void ADynamicTurret::SetupMovementRoute() const
 	{
 		const FVector PointLocation = SplineComp->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::Local);
 		MovementComp->ControlPoints.Add(FInterpControlPoint(PointLocation, true));
-		
-		ULog::Vector(PointLocation, LO_Both);
 	}
 
 	MovementComp->FinaliseControlPoints();

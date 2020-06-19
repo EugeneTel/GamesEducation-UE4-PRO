@@ -12,8 +12,14 @@
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 #include "_Homework/L_04_Components/TimeControlComponent.h"
+#include "GamesEducationWeaponComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
+
+FOnGamesEducationCharacterUpdateAmmo AGamesEducationCharacter::NotifyUpdateAmmo;
+FOnGamesEducationCharacterUpdateScore AGamesEducationCharacter::NotifyUpdateScore;
+FOnGamesEducationCharacterEnemyKill AGamesEducationCharacter::NotifyEnemyKill;
+FOnGamesEducationCharacterNoAmmo AGamesEducationCharacter::NotifyNoAmmo;
 
 //////////////////////////////////////////////////////////////////////////
 // AGamesEducationCharacter
@@ -83,6 +89,8 @@ AGamesEducationCharacter::AGamesEducationCharacter()
 
 	// Uncomment the following line to turn motion controllers on by default:
 	//bUsingMotionControllers = true;
+
+	WeaponComponent = CreateDefaultSubobject<UGamesEducationWeaponComponent>(TEXT("WeaponComponent"));
 }
 
 void AGamesEducationCharacter::BeginPlay()
@@ -104,6 +112,9 @@ void AGamesEducationCharacter::BeginPlay()
 		VR_Gun->SetHiddenInGame(true, true);
 		Mesh1P->SetHiddenInGame(false, true);
 	}
+
+	// Init Weapon Ammo
+	WeaponComponent->InitAmmo();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -120,6 +131,9 @@ void AGamesEducationCharacter::SetupPlayerInputComponent(class UInputComponent* 
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AGamesEducationCharacter::OnFire);
+
+	// Bind reload event
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AGamesEducationCharacter::OnReload);
 
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
@@ -145,50 +159,12 @@ void AGamesEducationCharacter::SetupPlayerInputComponent(class UInputComponent* 
 
 void AGamesEducationCharacter::OnFire()
 {
-	// try and fire a projectile
-	if (ProjectileClass != NULL)
-	{
-		UWorld* const World = GetWorld();
-		if (World != NULL)
-		{
-			if (bUsingMotionControllers)
-			{
-				const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();
-				const FVector SpawnLocation = VR_MuzzleLocation->GetComponentLocation();
-				World->SpawnActor<AGamesEducationProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
-			}
-			else
-			{
-				const FRotator SpawnRotation = GetControlRotation();
-				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+	WeaponComponent->Fire();
+}
 
-				//Set Spawn Collision Handling Override
-				FActorSpawnParameters ActorSpawnParams;
-				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-				// spawn the projectile at the muzzle
-				World->SpawnActor<AGamesEducationProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-			}
-		}
-	}
-
-	// try and play the sound if specified
-	if (FireSound != NULL)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
-
-	// try and play a firing animation if specified
-	if (FireAnimation != NULL)
-	{
-		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-		if (AnimInstance != NULL)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
-		}
-	}
+void AGamesEducationCharacter::OnReload()
+{
+	WeaponComponent->Reload();
 }
 
 void AGamesEducationCharacter::OnResetVR()
