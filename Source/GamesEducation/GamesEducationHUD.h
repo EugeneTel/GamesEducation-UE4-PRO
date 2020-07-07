@@ -13,6 +13,9 @@ class UUserWidget;
 class UTexture2D;
 class ADynamicTurret;
 
+UENUM()
+enum EMenus {E_None = 0, E_MainMenu };
+
 UCLASS()
 class AGamesEducationHUD : public AHUD
 {
@@ -26,6 +29,9 @@ public:
 
 	void BeginPlay() override;
 protected:
+
+	UPROPERTY(EditDefaultsOnly)
+	TMap<TEnumAsByte<EMenus>, TSubclassOf<UUserWidget>> IdToMenu;
 
 	/** Array of information strings to render (Reload, Kill enemy etc) */
 	TArray<FCanvasTextItem> InfoItems;
@@ -115,6 +121,10 @@ private:
 	/** Crosshair asset pointer */
 	UTexture2D* CrosshairTex;
 
+	/** Main menu widget */
+	UPROPERTY()
+	UUserWidget* MainMenuWidget;
+
 	/** Player State widget */
 	UPROPERTY()
 	UUserWidget* PlayerStateWidget;
@@ -125,7 +135,7 @@ private:
 
 	/** Create custom widgets */
 	UFUNCTION()
-	void CreateCustomWidget();
+	void CreateCustomWidgets();
 
 };
 

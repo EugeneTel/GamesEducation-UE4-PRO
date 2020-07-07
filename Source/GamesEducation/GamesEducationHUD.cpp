@@ -79,13 +79,13 @@ void AGamesEducationHUD::BeginPlay()
 
 	// NoAmmo subscription
 	AGamesEducationCharacter::NotifyNoAmmo.AddUObject(this, &AGamesEducationHUD::OnNoAmmo);
+
+	CreateCustomWidgets();
 }
 
 void AGamesEducationHUD::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	
-	CreateCustomWidget();
 }
 
 void AGamesEducationHUD::DrawCrosshair()
@@ -162,8 +162,16 @@ void AGamesEducationHUD::AddInfoString(const FCanvasTextItem InInfoString)
 	InfoItems.Add(InInfoString);
 }
 
-void AGamesEducationHUD::CreateCustomWidget()
+void AGamesEducationHUD::CreateCustomWidgets()
 {
+	// Create Main Menu Widget
+	if (!MainMenuWidget && IdToMenu[EMenus::E_MainMenu])
+	{
+		MainMenuWidget = CreateWidget(GetWorld(), IdToMenu[EMenus::E_MainMenu]);
+		MainMenuWidget->AddToViewport();
+	}
+	
+	// Create Player State Widget
 	if (!PlayerStateWidget && PlayerStateWidgetClass)
 	{
 		PlayerStateWidget = CreateWidget(GetWorld(), PlayerStateWidgetClass);
