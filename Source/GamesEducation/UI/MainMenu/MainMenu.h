@@ -9,6 +9,7 @@
 
 class UVerticalBox;
 class UBaseButton;
+class MainMenuHandler;
 
 /**
  * 
@@ -20,18 +21,34 @@ class GAMESEDUCATION_API UMainMenu : public UUserWidget
 
 private:
     UPROPERTY()
-    TArray<UBaseButton*> _MainMenuBtns;
-    
+    TMap<int32, UBaseButton*> _MainMenuBtns;
+
+    TSharedPtr<MainMenuHandler> _InputHandler;
+
+    int32 _CurrentSelectedItem;
+
+    int32 _PrevSelectedItem;
+
+    int32 _MaxItems;
+
+protected:
+        void NativeDestruct() override;
 public:
-
-    void NativeConstruct() override;
-
-    FReply NativeOnKeyDown(const FGeometry & InGeometry, const FKeyEvent & InKeyEvent) override;
-
 
     UPROPERTY(EditAnywhere, meta = (BindWidgetOptional))
     UVerticalBox* MainMenuContainer;
 
     UPROPERTY(EditAnywhere)
     TSubclassOf<UBaseButton> BtnTemplate;
+
+    void NativeConstruct() override;
+
+    void NextItem();
+
+    void PrevItem();
+
+    void SelectItem(int32 Index);
+
+    void UnSelectItem(int32 Index);
+    
 };
