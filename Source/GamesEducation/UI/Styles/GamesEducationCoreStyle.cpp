@@ -7,7 +7,8 @@
 
 TSharedPtr<ISlateStyle> GamesEducationCoreStyle::StylePtr = nullptr;
 
-TSharedPtr<ISlateStyle> CreateStyle()
+
+TSharedPtr<ISlateStyle> GamesEducationCoreStyle::CreateStyle()
 {
     TSharedPtr<ISlateStyle> Style = FSlateGameResources::New("GamesEducationCoreStyle", "/Game/GamesEducation/UI/Styles", "/Game/GamesEducation/UI/Styles");
 

@@ -9,6 +9,8 @@
 #include "Widgets/Text/STextBlock.h"
 #include "Widgets/Input/SButton.h"
 #include "GamesEducation/GamesEducationHUD.h"
+#include "GamesEducation/UI/Styles/GamesEducationCoreStyle.h"
+#include "GamesEducation/UI/Styles/PauseMenuWidgetStyle.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
@@ -20,19 +22,20 @@ void SPauseMenuWidget::Construct(const FArguments& InArgs)
 
 	bCanSupportFocus = true;
 
-	const FMargin ContentPadding = FMargin(300.f, 300.f);
-	const FMargin ButtonPadding = FMargin(10.f);
+	// Setup styling
+	const FPauseMenuStyle& Style = GamesEducationCoreStyle::Get().GetWidgetStyle<FPauseMenuStyle>("PauseMenuStyleAsset");
+	
+	const FSlateBrush BackgroundImage = Style.BackgroundImage;
+	const FMargin ContentPadding = Style.ContentPadding;
+	const FMargin ButtonPadding = Style.ButtonPadding;
+	const FSlateFontInfo ButtonTextStyle = Style.ButtonTextStyle;
+	const FSlateFontInfo TitleTextStyle = Style.TitleTextStyle;
 
+	// Setup texts
 	const FText TitleText = LOCTEXT("GameTitle", "GamesEducation");
 	const FText PlayText = LOCTEXT("PlayGame", "Play");
 	const FText SettingsText = LOCTEXT("Settings", "Settings");
 	const FText QuitText = LOCTEXT("QuitGame", "Quit Game");
-
-	FSlateFontInfo ButtonTextStyle = FCoreStyle::Get().GetFontStyle("EmbossedText");
-	ButtonTextStyle.Size = 40.f;
-
-	FSlateFontInfo TitleTextStyle = ButtonTextStyle;
-	TitleTextStyle.Size = 60.f;
 	
 	ChildSlot
 	[
@@ -42,7 +45,7 @@ void SPauseMenuWidget::Construct(const FArguments& InArgs)
 		.HAlign(HAlign_Fill)
 		[
 			SNew(SImage)
-			.ColorAndOpacity(FColor::Black)
+			.Image(&BackgroundImage)
 		]
 		+ SOverlay::Slot()
 		.VAlign(VAlign_Fill)
