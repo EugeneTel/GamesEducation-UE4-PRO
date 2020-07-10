@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Image.h"
+#include "Components/TextBlock.h"
+
 
 #include "MainMenu.generated.h"
 
@@ -32,7 +35,9 @@ private:
     int32 _MaxItems;
 
 protected:
-        void NativeDestruct() override;
+    void NativeDestruct() override;
+
+    void NativePreConstruct() override;
 public:
 
     UPROPERTY(EditAnywhere, meta = (BindWidgetOptional))
@@ -40,6 +45,12 @@ public:
 
     UPROPERTY(EditAnywhere)
     TSubclassOf<UBaseButton> BtnTemplate;
+
+    UPROPERTY(meta = (BindWidgetOptional))
+    UImage* BackgroundImage;
+
+    UPROPERTY(meta = (BindWidgetOptional))
+    UTextBlock* TitleText;
 
     void NativeConstruct() override;
 

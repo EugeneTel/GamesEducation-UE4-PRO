@@ -6,6 +6,8 @@
 #include "BaseButton.h"
 #include "MainMenuHandler.h"
 #include "Framework/Application/SlateApplication.h"
+#include "GamesEducation/UI/Styles/GamesEducationCoreStyle.h"
+#include "GamesEducation/UI/Styles/MenuWidgetStyle.h"
 
 void UMainMenu::NativeConstruct()
 {
@@ -35,6 +37,23 @@ void UMainMenu::NativeDestruct()
     Super::NativeDestruct();
 
     FSlateApplication::Get().UnregisterInputPreProcessor(_InputHandler);
+}
+
+void UMainMenu::NativePreConstruct()
+{
+    Super::NativePreConstruct();
+
+    const FMenuStyle& Style = GamesEducationCoreStyle::Get().GetWidgetStyle<FMenuStyle>("MainMenuStyleAsset");
+    
+    if (BackgroundImage)
+    {
+        BackgroundImage->SetBrush(Style.BackgroundImage);
+    }
+    
+    if (TitleText)
+    {
+        TitleText->SetFont(Style.TitleFont);
+    }
 }
 
 void UMainMenu::NextItem()
