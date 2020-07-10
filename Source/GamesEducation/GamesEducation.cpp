@@ -2,6 +2,20 @@
 
 #include "GamesEducation.h"
 #include "Modules/ModuleManager.h"
+#include "UI/Styles/GamesEducationCoreStyle.h"
 
-IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, GamesEducation, "GamesEducation" );
- 
+void FGamesEducationModule::StartupModule()
+{
+    FDefaultGameModuleImpl::StartupModule();
+
+    GamesEducationCoreStyle::Initialize();
+}
+
+void FGamesEducationModule::ShutdownModule()
+{
+    GamesEducationCoreStyle::Shutdown();
+
+    FDefaultGameModuleImpl::ShutdownModule();
+}
+
+IMPLEMENT_PRIMARY_GAME_MODULE( FGamesEducationModule, GamesEducation, "GamesEducation" );
