@@ -168,7 +168,7 @@ void AGamesEducationHUD::CreateCustomWidgets()
 	if (!MainMenuWidget && IdToMenu[EMenus::E_MainMenu])
 	{
 		MainMenuWidget = CreateWidget(GetWorld(), IdToMenu[EMenus::E_MainMenu]);
-		MainMenuWidget->AddToViewport();
+		// MainMenuWidget->AddToViewport();
 	}
 	
 	// Create Player State Widget

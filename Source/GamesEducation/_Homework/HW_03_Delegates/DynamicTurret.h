@@ -52,7 +52,7 @@ protected:
 
 	/** Setup The Turret Route based on the Spline points */ 
 	UFUNCTION()
-	void SetupMovementRoute() const;
+	virtual void SetupMovementRoute() const;
 
 	/** The Turret Looks on the Player */
 	UFUNCTION()
