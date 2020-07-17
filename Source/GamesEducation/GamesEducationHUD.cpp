@@ -3,10 +3,13 @@
 #include "GamesEducationHUD.h"
 #include "Engine/Canvas.h"
 #include "Engine/Texture2D.h"
+#include "Engine/Engine.h"
 #include "CanvasItem.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GamesEducation/_Homework/HW_03_Delegates/DynamicTurret.h"
 #include "GamesEducation/GamesEducationCharacter.h"
+#include "GamesEducation/UI/PauseMenu/SPauseMenuWidget.h"
+#include "Widgets/SWeakWidget.h"
 #include "Log.h"
 
 AGamesEducationHUD::AGamesEducationHUD()
@@ -169,12 +172,49 @@ void AGamesEducationHUD::CreateCustomWidgets()
 	{
 		MainMenuWidget = CreateWidget(GetWorld(), IdToMenu[EMenus::E_MainMenu]);
 		// MainMenuWidget->AddToViewport();
-	}
+  }
 	
 	// Create Player State Widget
 	if (!PlayerStateWidget && PlayerStateWidgetClass)
 	{
 		PlayerStateWidget = CreateWidget(GetWorld(), PlayerStateWidgetClass);
 		PlayerStateWidget->AddToViewport();
+	}
+
+	ShowPauseMenu();
+}
+
+void AGamesEducationHUD::ShowPauseMenu()
+{
+	if (!GEngine || !GEngine->GameViewport)
+		return;
+	
+	PauseMenuWidget = SNew(SPauseMenuWidget).OwnerHUDArg(this);
+
+	GEngine->GameViewport->AddViewportWidgetContent(
+        SAssignNew(PauseMenuWidgetContainer, SWeakWidget)
+        .PossiblyNullContent(PauseMenuWidget.ToSharedRef())
+    );
+
+	PauseMenuWidget->SetVisibility(EVisibility::Visible);
+
+	if (PlayerOwner)
+	{
+		PlayerOwner->bShowMouseCursor = true;
+		PlayerOwner->SetInputMode(FInputModeUIOnly());
+	}
+}
+
+void AGamesEducationHUD::RemovePauseMenu()
+{
+	if (!GEngine || !GEngine->GameViewport || !PauseMenuWidgetContainer.IsValid())
+		return;
+
+	GEngine->GameViewport->RemoveViewportWidgetContent(PauseMenuWidgetContainer.ToSharedRef());
+
+	if (PlayerOwner)
+	{
+		PlayerOwner->bShowMouseCursor = false;
+		PlayerOwner->SetInputMode(FInputModeGameOnly());
 	}
 }

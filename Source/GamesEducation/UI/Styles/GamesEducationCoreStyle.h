@@ -16,4 +16,6 @@ public:
     static void Shutdown();
 
     static const ISlateStyle& Get();
+
+    static TSharedPtr<ISlateStyle> CreateStyle();
 };

@@ -12,6 +12,8 @@
 class UUserWidget;
 class UTexture2D;
 class ADynamicTurret;
+class SPauseMenuWidget;
+class SWidget;
 
 UENUM()
 enum EMenus {E_None = 0, E_MainMenu };
@@ -125,6 +127,10 @@ private:
 	UPROPERTY()
 	UUserWidget* MainMenuWidget;
 
+	TSharedPtr<SPauseMenuWidget> PauseMenuWidget;
+
+	TSharedPtr<SWidget> PauseMenuWidgetContainer;
+
 	/** Player State widget */
 	UPROPERTY()
 	UUserWidget* PlayerStateWidget;
@@ -136,6 +142,14 @@ private:
 	/** Create custom widgets */
 	UFUNCTION()
 	void CreateCustomWidgets();
+
+public:
+	
+	/** Create Pause Menu Widget */
+    void ShowPauseMenu();
+
+	/** Remove Pause Menu Widget */
+	void RemovePauseMenu();
 
 };
 
