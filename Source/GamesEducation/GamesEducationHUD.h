@@ -5,7 +5,7 @@
 #include "CanvasItem.h"
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "_Homework/HW_05_UMG_C/PlayerStateWidget.h"
+#include "_Workspace/HW_05_UMG_C/PlayerStateWidget.h"
 
 #include "GamesEducationHUD.generated.h"
 

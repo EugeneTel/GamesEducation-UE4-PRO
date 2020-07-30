@@ -6,7 +6,7 @@
 #include "Engine/Engine.h"
 #include "CanvasItem.h"
 #include "UObject/ConstructorHelpers.h"
-#include "GamesEducation/_Homework/HW_03_Delegates/DynamicTurret.h"
+#include "GamesEducation/_Workspace/HW_03_Delegates/DynamicTurret.h"
 #include "GamesEducation/GamesEducationCharacter.h"
 #include "GamesEducation/UI/PauseMenu/SPauseMenuWidget.h"
 #include "Widgets/SWeakWidget.h"
@@ -181,7 +181,8 @@ void AGamesEducationHUD::CreateCustomWidgets()
 		PlayerStateWidget->AddToViewport();
 	}
 
-	ShowPauseMenu();
+	// Pause menu activation
+	//ShowPauseMenu();
 }
 
 void AGamesEducationHUD::ShowPauseMenu()

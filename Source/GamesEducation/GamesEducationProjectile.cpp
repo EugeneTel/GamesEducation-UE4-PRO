@@ -3,7 +3,7 @@
 #include "GamesEducationProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
-#include "_Homework/HW_03_Delegates/IDamage.h"
+#include "_Workspace/HW_03_Delegates/IDamage.h"
 
 AGamesEducationProjectile::AGamesEducationProjectile() 
 {

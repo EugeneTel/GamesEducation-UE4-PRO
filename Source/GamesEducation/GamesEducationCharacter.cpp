@@ -11,7 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
-#include "_Homework/L_04_Components/TimeControlComponent.h"
+#include "_Workspace/L_04_Components/TimeControlComponent.h"
 #include "GamesEducationWeaponComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
