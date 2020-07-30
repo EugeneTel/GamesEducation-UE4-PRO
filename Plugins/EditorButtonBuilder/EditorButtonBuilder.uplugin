@@ -1,0 +1,24 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "EditorButtonBuilder",
+	"Description": "Creates a button in property list with functionality to create and duplicate components",
+	"Category": "Other",
+	"CreatedBy": "Eugene",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "EditorButtonBuilder",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
