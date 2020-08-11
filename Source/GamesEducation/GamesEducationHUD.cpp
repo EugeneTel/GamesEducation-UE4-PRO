@@ -165,6 +165,22 @@ void AGamesEducationHUD::AddInfoString(const FCanvasTextItem InInfoString)
 	InfoItems.Add(InInfoString);
 }
 
+void AGamesEducationHUD::UpdateComboCount(int32 Value)
+{
+	if (HitComboWidget)
+	{
+		HitComboWidget->UpdateComboCount(Value);
+	}
+}
+
+void AGamesEducationHUD::ResetCombo()
+{
+	if (HitComboWidget)
+	{
+		HitComboWidget->ResetCombo();
+	}
+}
+
 void AGamesEducationHUD::CreateCustomWidgets()
 {
 	// Create Main Menu Widget
@@ -172,13 +188,23 @@ void AGamesEducationHUD::CreateCustomWidgets()
 	{
 		MainMenuWidget = CreateWidget(GetWorld(), IdToMenu[EMenus::E_MainMenu]);
 		// MainMenuWidget->AddToViewport();
-  }
+	}
 	
 	// Create Player State Widget
 	if (!PlayerStateWidget && PlayerStateWidgetClass)
 	{
 		PlayerStateWidget = CreateWidget(GetWorld(), PlayerStateWidgetClass);
 		PlayerStateWidget->AddToViewport();
+	}
+
+	// Create Hit Combo Widget
+	if (!HitComboWidget && HitComboWidgetClass)
+	{
+		HitComboWidget = CreateWidget<UHitComboWidget>(GetWorld(), HitComboWidgetClass);
+		if (HitComboWidget)
+		{
+			HitComboWidget->AddToViewport();
+		}
 	}
 
 	// Pause menu activation

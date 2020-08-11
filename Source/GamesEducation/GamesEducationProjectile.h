@@ -19,7 +19,15 @@ class AGamesEducationProjectile : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ProjectileMovement;
 
+	/** Actor was hit by a projectile */
+	UPROPERTY()
+	AActor* HitActor;
+
+protected:
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 public:
+	
 	AGamesEducationProjectile();
 
 	/** called when projectile hits something */

@@ -6,6 +6,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "_Workspace/HW_05_UMG_C/PlayerStateWidget.h"
+#include "_Workspace/HW_10_UIHIT/HitComboWidget.h"
+
 
 #include "GamesEducationHUD.generated.h"
 
@@ -138,6 +140,20 @@ private:
 	/** Player State Widget Class */
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UPlayerStateWidget> PlayerStateWidgetClass;
+	
+	/** Hit Combo Widget Class */
+	UPROPERTY(EditDefaultsOnly, Category = "Interactive")
+	TSubclassOf<UHitComboWidget> HitComboWidgetClass;
+
+	/** Hit Combo Widget Instance */
+	UPROPERTY()
+	UHitComboWidget* HitComboWidget;
+
+	/** Update Hit Combo widget */
+	void UpdateComboCount(int32 Value);
+
+	/** Reset Hit Combo widget */
+	void ResetCombo();
 
 	/** Create custom widgets */
 	UFUNCTION()
