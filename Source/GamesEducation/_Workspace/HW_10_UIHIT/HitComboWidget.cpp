@@ -20,6 +20,8 @@ void UHitComboWidget::NativeConstruct()
 
     ComboFadeAnimation = GetAnimationByName(TEXT("ComboFade"));
     ComboShakeAnimation = GetAnimationByName(TEXT("ComboShake"));
+
+    ResetCombo();
 }
 
 void UHitComboWidget::UpdateComboCount(int32 Value)
@@ -33,7 +35,7 @@ void UHitComboWidget::UpdateComboCount(int32 Value)
     {
         TXTCombo->SetVisibility(ESlateVisibility::Visible);
     }
-    TXTCombo->SetText(FText::FromString((FString::FromInt(Value) + "x Combo")));
+    TXTCombo->SetText(FText::FromString((FString::FromInt(Value) + "x")));
 
     // play animations
     if (ComboShakeAnimation)
@@ -44,15 +46,40 @@ void UHitComboWidget::UpdateComboCount(int32 Value)
     {
         PlayAnimation(ComboFadeAnimation, 0.f, 1, EUMGSequencePlayMode::Forward, 1.f);
     }
+
+    // Update other components
+
+    if (TXTComboLeft->Visibility == ESlateVisibility::Hidden)
+    {
+        TXTComboLeft->SetVisibility(ESlateVisibility::Visible);
+    }
+
+    TXTComboLeft->SetText(FText::FromString((FString::FromInt(Value - 1) + "x")));
+
+    if (TXTComboRight->Visibility == ESlateVisibility::Hidden)
+    {
+        TXTComboRight->SetVisibility(ESlateVisibility::Visible);
+    }
+    TXTComboRight->SetText(FText::FromString((FString::FromInt(Value + 1) + "x")));
 }
 
 void UHitComboWidget::ResetCombo() const
 {
-    GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, __FUNCTION__);
+   // GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, __FUNCTION__);
 
     if (TXTCombo)
     {
         TXTCombo->SetVisibility(ESlateVisibility::Hidden);
+    }
+
+    if (TXTComboLeft)
+    {
+        TXTComboLeft->SetVisibility(ESlateVisibility::Hidden);
+    }
+    
+    if (TXTComboRight)
+    {
+        TXTComboRight->SetVisibility(ESlateVisibility::Hidden);
     }
 }
 
