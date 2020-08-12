@@ -1,9 +1,26 @@
 // Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #include "GamesEducationProjectile.h"
+
+#include "GamesEducationCharacter.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "_Workspace/HW_03_Delegates/IDamage.h"
+
+void AGamesEducationProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	// Hit result notification
+	if (HitActor)
+	{
+		AGamesEducationCharacter::NotifyHitEnemy.Broadcast(HitActor);
+	}
+	else
+	{
+		AGamesEducationCharacter::NotifyShootMiss.Broadcast();
+	}
+
+	Super::EndPlay(EndPlayReason);
+}
 
 AGamesEducationProjectile::AGamesEducationProjectile() 
 {
@@ -46,6 +63,7 @@ void AGamesEducationProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* Othe
 	if (OtherActor != NULL && OtherActor->GetClass()->ImplementsInterface(UIDamage::StaticClass()))
 	{
 		Cast<IIDamage>(OtherActor)->OnDamageReceived().Broadcast(10.f);
+		HitActor = OtherActor;
 		Destroy();
 	}
 }

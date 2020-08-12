@@ -12,6 +12,8 @@ class ADynamicTurret;
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterUpdateAmmo, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterUpdateScore, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterEnemyKill, ADynamicTurret*);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGamesEducationCharacterHitEnemy, AActor*);
+DECLARE_MULTICAST_DELEGATE(FOnGamesEducationCharacterShootMiss);
 DECLARE_MULTICAST_DELEGATE(FOnGamesEducationCharacterNoAmmo);
 
 UCLASS(config=Game)
@@ -70,6 +72,12 @@ public:
 
 	/** Global notification when a character has no ammo. Needed for HUD */
 	GAMESEDUCATION_API static FOnGamesEducationCharacterNoAmmo NotifyNoAmmo;
+
+	/** Global notification when a character hit an enemy. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterHitEnemy NotifyHitEnemy;
+	
+	/** Global notification when a character missed on shooting. Needed for HUD */
+	GAMESEDUCATION_API static FOnGamesEducationCharacterShootMiss NotifyShootMiss;
 	
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)

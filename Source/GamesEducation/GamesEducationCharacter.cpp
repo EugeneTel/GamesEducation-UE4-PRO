@@ -20,6 +20,8 @@ FOnGamesEducationCharacterUpdateAmmo AGamesEducationCharacter::NotifyUpdateAmmo;
 FOnGamesEducationCharacterUpdateScore AGamesEducationCharacter::NotifyUpdateScore;
 FOnGamesEducationCharacterEnemyKill AGamesEducationCharacter::NotifyEnemyKill;
 FOnGamesEducationCharacterNoAmmo AGamesEducationCharacter::NotifyNoAmmo;
+FOnGamesEducationCharacterHitEnemy AGamesEducationCharacter::NotifyHitEnemy;
+FOnGamesEducationCharacterShootMiss AGamesEducationCharacter::NotifyShootMiss;
 
 //////////////////////////////////////////////////////////////////////////
 // AGamesEducationCharacter
