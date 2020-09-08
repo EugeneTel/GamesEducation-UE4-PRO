@@ -7,9 +7,13 @@ public class GamesEducation : ModuleRules
 	public GamesEducation(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "ProceduralMeshComponent", "DesktopPlatform" });
 		
-		PrivateDependencyModuleNames.AddRange(new string[] { "Debug", "Slate", "SlateCore" });
+		PublicDependencyModuleNames.AddRange(new string[]
+		{
+			"Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "ProceduralMeshComponent",
+			"DesktopPlatform", "Debug", "Slate", "SlateCore", "AnimationCore", "AnimGraphRuntime", "AIModule"
+		});
+		
+		PrivateDependencyModuleNames.AddRange(new string[] { });
 	}
 }
