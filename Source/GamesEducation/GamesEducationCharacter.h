@@ -103,6 +103,9 @@ protected:
 	/** Reloads the weapon */
 	void OnReload();
 
+	/** Show chat window */
+	void OnChatWindow();
+
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
 
