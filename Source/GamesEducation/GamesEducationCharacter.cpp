@@ -13,6 +13,7 @@
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 #include "_Workspace/L_04_Components/TimeControlComponent.h"
 #include "GamesEducationWeaponComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -92,6 +93,23 @@ AGamesEducationCharacter::AGamesEducationCharacter()
 	WeaponComponent = CreateDefaultSubobject<UGamesEducationWeaponComponent>(TEXT("WeaponComponent"));
 }
 
+void AGamesEducationCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	// Calculate falling velocity
+	CalcFallVelocity();
+	
+}
+
+void AGamesEducationCharacter::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+
+	// Apply damage and camera shake
+	ApplyFallDamage(FallVelocity);
+}
+
 void AGamesEducationCharacter::BeginPlay()
 {
 	// Call the base class  
@@ -154,6 +172,28 @@ void AGamesEducationCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	// Create Time Control Component using the template function
 	TimeControlComp = CreateComponentWithInput(this, PlayerInputComponent);
 	TimeControlComp->RegisterComponent();
+}
+
+void AGamesEducationCharacter::CalcFallVelocity()
+{
+	if ( GetMovementComponent()->IsFalling())
+	{
+		FallVelocity = GetVelocity().Z;
+	}
+}
+
+void AGamesEducationCharacter::ApplyFallDamage(const float Velocity) const
+{
+	UWorld* const World = GetWorld();
+	if (World == nullptr || LandCameraShakeCurve == nullptr || LandCameraShake == nullptr)
+		return;
+
+
+	// Camera shake depending on the velocity
+	float const ShakeScale = LandCameraShakeCurve->GetFloatValue(FMath::Abs(Velocity / 10));
+	World->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(LandCameraShake, ShakeScale);
+
+	// @TODO: Apply fall damage to the character
 }
 
 void AGamesEducationCharacter::OnFire()

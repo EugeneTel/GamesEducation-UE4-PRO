@@ -51,6 +51,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
     class UAnimMontage* FireAnimation;
 
+	/** Camera shake on firing */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Gameplay)
+	TSubclassOf<UCameraShake> FireCameraShake; 
+
 //----------------------------------------------------------------------------------------------------------------------
 // File System
 //----------------------------------------------------------------------------------------------------------------------

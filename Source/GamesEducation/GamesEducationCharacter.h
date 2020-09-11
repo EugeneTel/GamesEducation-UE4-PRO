@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Camera/CameraShake.h"
 #include "GameFramework/Character.h"
 #include "GamesEducationCharacter.generated.h"
 
@@ -56,6 +58,9 @@ class AGamesEducationCharacter : public ACharacter
 public:
 	AGamesEducationCharacter();
 
+	virtual void Tick(float DeltaSeconds) override;
+
+	virtual void Landed(const FHitResult& Hit) override;
 protected:
 	virtual void BeginPlay();
 
@@ -94,6 +99,26 @@ public:
 	/** Weapon Component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class UGamesEducationWeaponComponent* WeaponComponent;
+
+	/** Curve for camera shake depends on fall velocity */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Gameplay)
+	UCurveFloat* LandCameraShakeCurve;
+
+	/** Camera shake on landing */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Gameplay)
+	TSubclassOf<UCameraShake> LandCameraShake; 
+	
+	/** Velocity on falling */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category=Gameplay)
+	float FallVelocity;
+
+	/** Calculate falling velocity if needed */
+	UFUNCTION(BlueprintCallable)
+	void CalcFallVelocity();
+
+	/** Apply Fall damage to the character */
+	UFUNCTION(BlueprintCallable)
+	void ApplyFallDamage(float Velocity) const;
 
 protected:
 	
