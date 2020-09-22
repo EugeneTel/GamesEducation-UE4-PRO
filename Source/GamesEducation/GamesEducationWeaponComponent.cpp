@@ -48,6 +48,10 @@ void UGamesEducationWeaponComponent::TickComponent(float DeltaTime, ELevelTick T
 
 void UGamesEducationWeaponComponent::Fire()
 {
+	UWorld* const World = GetWorld();
+	if (World == nullptr)
+		return;
+	
 	if (!HasAmmo())
 	{
 		// Inform subscribers about No Ammo
@@ -58,23 +62,20 @@ void UGamesEducationWeaponComponent::Fire()
 	// try and fire a projectile
 	if (ProjectileClass != NULL)
 	{
-		UWorld* const World = GetWorld();
-		if (World != NULL)
-		{
-			const FRotator SpawnRotation = WeaponOwner->GetControlRotation();
-			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-			const FVector SpawnLocation = ((WeaponOwner->GetFP_MuzzleLocation() != nullptr) ? WeaponOwner->GetFP_MuzzleLocation()->GetComponentLocation() : WeaponOwner->GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+		const FRotator SpawnRotation = WeaponOwner->GetControlRotation();
+		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+		const FVector SpawnLocation = ((WeaponOwner->GetFP_MuzzleLocation() != nullptr) ? WeaponOwner->GetFP_MuzzleLocation()->GetComponentLocation() : WeaponOwner->GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
 
-			//Set Spawn Collision Handling Override
-			FActorSpawnParameters ActorSpawnParams;
-			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+		//Set Spawn Collision Handling Override
+		FActorSpawnParameters ActorSpawnParams;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-			// spawn the projectile at the muzzle
-			World->SpawnActor<AGamesEducationProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+		// spawn the projectile at the muzzle
+		World->SpawnActor<AGamesEducationProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 
-			// Use 1 bullet
-			UseAmmo();
-		}
+		// Use 1 bullet
+		UseAmmo();
+		
 	}
 
 	// try and play the sound if specified
@@ -92,6 +93,12 @@ void UGamesEducationWeaponComponent::Fire()
 		{
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
+	}
+
+	// camera shake
+	if (FireCameraShake != nullptr)
+	{
+		World->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(FireCameraShake, 1.f);
 	}
 }
 
