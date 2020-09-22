@@ -16,6 +16,8 @@
 #include "_Workspace/L_04_Components/TimeControlComponent.h"
 #include "GamesEducationWeaponComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "DestructibleActor.h"
+#include "DestructibleComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -110,6 +112,8 @@ void AGamesEducationCharacter::Landed(const FHitResult& Hit)
 
 	// Apply damage and camera shake
 	ApplyFallDamage(FallVelocity);
+
+	ApplyDestructibleDamage(Hit, FallVelocity);
 }
 
 void AGamesEducationCharacter::BeginPlay()
@@ -199,6 +203,16 @@ void AGamesEducationCharacter::ApplyFallDamage(const float Velocity) const
 	World->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(LandCameraShake, ShakeScale);
 
 	// @TODO: Apply fall damage to the character
+}
+
+void AGamesEducationCharacter::ApplyDestructibleDamage(const FHitResult& Hit, const float Velocity) const
+{
+	ADestructibleActor* DestructibleActor = Cast<ADestructibleActor>(Hit.Actor);
+	if (DestructibleActor)
+	{
+		DestructibleActor->GetDestructibleComponent()->ApplyRadiusDamage(Velocity * 100.f, Hit.ImpactPoint, 10.f, 100.f, true);
+		DestructibleActor->GetDestructibleComponent()->AddRadialImpulse(Hit.ImpactPoint, 50.f, 1000.f, ERadialImpulseFalloff::RIF_Constant);
+	}
 }
 
 void AGamesEducationCharacter::OnFire()

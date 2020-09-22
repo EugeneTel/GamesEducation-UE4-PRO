@@ -120,6 +120,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ApplyFallDamage(float Velocity) const;
 
+	/** Apply Destructible damage to a landed actor */
+	UFUNCTION(BlueprintCallable)
+    void ApplyDestructibleDamage(const FHitResult& Hit, float Velocity) const;
+
 protected:
 	
 	/** Fires a projectile. */

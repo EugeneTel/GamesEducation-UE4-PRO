@@ -5,6 +5,8 @@
 #include "GamesEducationCharacter.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "DestructibleActor.h"
+#include "DestructibleComponent.h"
 #include "_Workspace/HW_03_Delegates/IDamage.h"
 
 void AGamesEducationProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -51,8 +53,19 @@ AGamesEducationProjectile::AGamesEducationProjectile()
 
 void AGamesEducationProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	if (OtherActor == nullptr || OtherActor == this)
+		return;
+
+	// Try to apply Destruction
+	ADestructibleActor* DestructibleActor = Cast<ADestructibleActor>(OtherActor);
+	if (DestructibleActor)
+	{
+		DestructibleActor->GetDestructibleComponent()->ApplyDamage(100.f, DestructibleActor->GetActorLocation(), Hit.Normal, 0.f);
+		OtherComp->AddImpulseAtLocation(GetVelocity() * 5.0f, GetActorLocation());
+	}
+	
 	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+	if ((OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
@@ -60,7 +73,7 @@ void AGamesEducationProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* Othe
 	}
 
 	// Try to Apply Damage to the Actor
-	if (OtherActor != NULL && OtherActor->GetClass()->ImplementsInterface(UIDamage::StaticClass()))
+	if (OtherActor->GetClass()->ImplementsInterface(UIDamage::StaticClass()))
 	{
 		Cast<IIDamage>(OtherActor)->OnDamageReceived().Broadcast(10.f);
 		HitActor = OtherActor;
