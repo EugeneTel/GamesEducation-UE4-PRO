@@ -70,8 +70,9 @@ void ADynamicTurret::BeginPlay()
 void ADynamicTurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	LookOnTarget();
+
+	// Works well only for single player mode
+	// LookOnTarget();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

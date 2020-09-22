@@ -1,6 +1,8 @@
 // Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #include "GamesEducationCharacter.h"
+
+#include "GamesEducationHUD.h"
 #include "GamesEducationProjectile.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
@@ -152,6 +154,9 @@ void AGamesEducationCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	// Bind reload event
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AGamesEducationCharacter::OnReload);
 
+	// Bind chat window event
+	PlayerInputComponent->BindAction("ChatWindow", IE_Pressed, this, &AGamesEducationCharacter::OnChatWindow);
+
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
 
@@ -204,6 +209,16 @@ void AGamesEducationCharacter::OnFire()
 void AGamesEducationCharacter::OnReload()
 {
 	WeaponComponent->Reload();
+}
+
+void AGamesEducationCharacter::OnChatWindow()
+{
+	AGamesEducationHUD* CurrentHUD = Cast<AGamesEducationHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	if (CurrentHUD)
+	{
+		CurrentHUD->ShowChatWidget();
+	}
+
 }
 
 void AGamesEducationCharacter::OnResetVR()
