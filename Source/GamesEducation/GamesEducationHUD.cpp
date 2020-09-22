@@ -207,6 +207,12 @@ void AGamesEducationHUD::CreateCustomWidgets()
 		}
 	}
 
+	// Create Chat Window Widget
+	if (!ChatWindowWidget && ChatWindowWidgetClass)
+	{
+		ChatWindowWidget = CreateWidget<UChatWindowWidget>(GetWorld(), ChatWindowWidgetClass);
+	}
+
 	// Pause menu activation
 	//ShowPauseMenu();
 }
@@ -243,5 +249,41 @@ void AGamesEducationHUD::RemovePauseMenu()
 	{
 		PlayerOwner->bShowMouseCursor = false;
 		PlayerOwner->SetInputMode(FInputModeGameOnly());
+	}
+}
+
+void AGamesEducationHUD::AddMessageToChatWindow(const FText& Message) const
+{
+	if (ChatWindowWidget)
+	{
+		ChatWindowWidget->AddMessage(Message);
+	}
+}
+
+void AGamesEducationHUD::ShowChatWidget()
+{
+	if (ChatWindowWidget && !ChatWindowWidget->IsInViewport())
+	{
+		ChatWindowWidget->AddToViewport();
+
+		if (PlayerOwner)
+		{
+			PlayerOwner->bShowMouseCursor = true;
+			PlayerOwner->SetInputMode(FInputModeUIOnly());
+		}
+	}
+}
+
+void AGamesEducationHUD::HideChatWidget()
+{
+	if (ChatWindowWidget && ChatWindowWidget->IsInViewport())
+	{
+		ChatWindowWidget->RemoveFromViewport();
+
+		if (PlayerOwner)
+		{
+			PlayerOwner->bShowMouseCursor = false;
+			PlayerOwner->SetInputMode(FInputModeGameOnly());
+		}
 	}
 }

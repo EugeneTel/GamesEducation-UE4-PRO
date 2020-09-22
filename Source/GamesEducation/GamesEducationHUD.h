@@ -7,6 +7,8 @@
 #include "GameFramework/HUD.h"
 #include "_Workspace/HW_05_UMG_C/PlayerStateWidget.h"
 #include "_Workspace/HW_10_UIHIT/HitComboWidget.h"
+#include "_Workspace/HW_13_MultiplayerChat/ChatWindowWidget.h"
+
 
 
 #include "GamesEducationHUD.generated.h"
@@ -149,6 +151,13 @@ private:
 	UPROPERTY()
 	UHitComboWidget* HitComboWidget;
 
+	/** Chat Window Widget Instance */
+	UPROPERTY()
+	UChatWindowWidget* ChatWindowWidget;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UChatWindowWidget> ChatWindowWidgetClass;
+
 	/** Update Hit Combo widget */
 	void UpdateComboCount(int32 Value);
 
@@ -166,6 +175,14 @@ public:
 
 	/** Remove Pause Menu Widget */
 	void RemovePauseMenu();
+
+	void AddMessageToChatWindow(const FText& Message) const;
+
+	/** Show Chat Widget */
+	void ShowChatWidget();
+	
+	/** Hide Chat Widget */
+	void HideChatWidget();
 
 };
 
