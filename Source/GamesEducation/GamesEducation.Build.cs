@@ -11,7 +11,8 @@ public class GamesEducation : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "ProceduralMeshComponent",
-			"DesktopPlatform", "Debug", "Slate", "SlateCore", "AnimationCore", "AnimGraphRuntime", "AIModule"
+			"DesktopPlatform", "Debug", "Slate", "SlateCore", "AnimationCore", "AnimGraphRuntime", "AIModule",
+			"ApexDestruction"
 		});
 		
 		PrivateDependencyModuleNames.AddRange(new string[] { });
